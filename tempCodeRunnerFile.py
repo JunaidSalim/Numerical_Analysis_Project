@@ -1,1 +1,0 @@
-math.sqrt(x) - 2
