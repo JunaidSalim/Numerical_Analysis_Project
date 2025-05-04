@@ -35,10 +35,9 @@ def secant(
         f_prev = f(x_prev)
         f_curr = f(x_curr)
         
-        if abs(f_curr - f_prev) < 1e-10:  # Avoid division by near-zero
+        if abs(f_curr - f_prev) < 1e-10:
             raise ValueError("Secant slope too close to zero")
             
-        # Calculate next approximation using secant formula
         x_next = x_curr - f_curr * (x_curr - x_prev) / (f_curr - f_prev)
         error = abs(x_next - x_curr)
         
@@ -62,7 +61,6 @@ def plotResults(f: Callable[[float], float], iterationData: list,
     """
     plt.figure(figsize=(12, 5))
     
-    # Plot error vs iterations
     plt.subplot(1, 2, 1)
     iterations = [data['iteration'] for data in iterationData]
     errors = [data['error'] for data in iterationData]
@@ -72,7 +70,6 @@ def plotResults(f: Callable[[float], float], iterationData: list,
     plt.title('Error vs Iterations')
     plt.grid(True)
     
-    # Plot function
     plt.subplot(1, 2, 2)
     x = np.linspace(x_range[0], x_range[1], 1000)
     y = [f(val) for val in x]
@@ -102,17 +99,16 @@ def printResults(iterationData: list, totalIterations: int) -> None:
     print(f"\nTotal Iterations: {totalIterations}")
 
 def main():
-    # Example: Find the root of f(x) = e^x - 5x
     def f(x: float) -> float:
         return np.exp(x) - 5*x
     
     try:
-        x0, x1 = 1.0, 2.0  # Initial guesses bracketing the root near 1.6
+        x0, x1 = 1.0, 2.0
         root, iterations, data = secant(f, x0, x1)
         print(f"\nTest Case: Finding root of f(x) = e^x - 5x")
         print(f"Initial guesses x0 = {x0}, x1 = {x1}")
         printResults(data, iterations)
-        plotResults(f, data, x_range=(-1, 3))  # Same range as used in Newton-Raphson
+        plotResults(f, data, x_range=(-1, 3))
         print(f"\nRoot found: {root:.8f}")
         
     except Exception as e:

@@ -34,7 +34,7 @@ def newtonRaphson(
         f_value = f(x_current)
         df_value = df(x_current)
         
-        if abs(df_value) < 1e-10:  # Avoid division by near-zero
+        if abs(df_value) < 1e-10:
             raise ValueError("Derivative too close to zero")
             
         x_next = x_current - f_value/df_value
@@ -59,7 +59,6 @@ def plotResults(f: Callable[[float], float], df: Callable[[float], float],
     """
     plt.figure(figsize=(15, 5))
     
-    # Plot error vs iterations
     plt.subplot(1, 3, 1)
     iterations = [data['iteration'] for data in iterationData]
     errors = [data['error'] for data in iterationData]
@@ -69,7 +68,6 @@ def plotResults(f: Callable[[float], float], df: Callable[[float], float],
     plt.title('Error vs Iterations')
     plt.grid(True)
     
-    # Plot function
     plt.subplot(1, 3, 2)
     x = np.linspace(x_range[0], x_range[1], 1000)
     y = [f(val) for val in x]
@@ -82,7 +80,6 @@ def plotResults(f: Callable[[float], float], df: Callable[[float], float],
     plt.legend()
     plt.grid(True)
     
-    # Plot derivative
     plt.subplot(1, 3, 3)
     y_derivative = [df(val) for val in x]
     plt.plot(x, y_derivative, 'g-', label="f'(x)")
@@ -111,24 +108,19 @@ def printResults(iterationData: list, totalIterations: int) -> None:
     print(f"\nTotal Iterations: {totalIterations}")
 
 def main():
-    # Example: Find the root of f(x) = e^x - 5x
     def f(x: float) -> float:
         return np.exp(x) - 5*x
     
     def df(x: float) -> float:
         return np.exp(x) - 5
     
-    try:
-        x0 = 2.0  # Initial guess
-        root, iterations, data = newtonRaphson(f, df, x0)
-        print(f"\nTest Case: Finding root of f(x) = e^x - 5x")
-        print(f"Initial guess x0 = {x0}")
-        printResults(data, iterations)
-        plotResults(f, df, data, x_range=(-1, 3))  # Adjusted range for better visualization
-        print(f"\nRoot found: {root:.8f}")
-        
-    except Exception as e:
-        print(f"Error: {e}")
+    x0 = 2.0
+    root, iterations, data = newtonRaphson(f, df, x0)
+    print(f"\nTest Case: Finding root of f(x) = e^x - 5x")
+    print(f"Initial guess x0 = {x0}")
+    printResults(data, iterations)
+    plotResults(f, df, data, x_range=(-1, 3))
+    print(f"\nRoot found: {root:.8f}")
 
 if __name__ == "__main__":
     main()

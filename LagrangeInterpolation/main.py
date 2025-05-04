@@ -26,7 +26,6 @@ def lagrangeInterpolation(
     result = 0.0
     
     for j in range(n):
-        # Compute basis polynomial L_j(x)
         basis = 1.0
         for i in range(n):
             if i != j:
@@ -76,7 +75,6 @@ def plotResults(
     """
     plt.figure(figsize=(12, 5))
     
-    # Plot interpolation polynomial
     plt.subplot(1, 2, 1)
     xSmooth = np.linspace(min(xPoints), max(xPoints), 1000)
     ySmooth = [lagrangeInterpolation(xPoints, yPoints, x) for x in xSmooth]
@@ -89,7 +87,6 @@ def plotResults(
     plt.grid(True)
     plt.legend()
     
-    # Plot comparison with original function
     plt.subplot(1, 2, 2)
     ySmoothTrue = [originalFunction(x) for x in xSmooth]
     
@@ -97,7 +94,6 @@ def plotResults(
     plt.plot(xSmooth, ySmooth, 'b--', label='Interpolation Polynomial')
     plt.plot(xPoints, yPoints, 'ro', label='Data Points')
     
-    # Add test points
     testX = [data['x'] for data in evaluationData]
     testYInterp = [data['yInterp'] for data in evaluationData]
     testYTrue = [data['yTrue'] for data in evaluationData]
@@ -138,23 +134,15 @@ def printResults(
         print(f"| {data['x']:8.4f} | {data['yInterp']:10.4f} | {data['yTrue']:9.4f} | {data['error']:8.2e} |")
 
 def main():
-    try:
-        # Generate more data points (15 points) over [-5, 5]
-        xPoints = np.linspace(-5, 5, 15)
-        yPoints = np.array([originalFunction(x) for x in xPoints])
-        
-        # Define test points (avoiding data points)
-        testPoints = np.array([-4.2, -2.7, -1.3, 0.8, 2.4, 3.9])
-        
-        # Evaluate interpolation at test points
-        evaluationData = evaluatePoints(xPoints, yPoints, testPoints)
-        
-        # Print and plot results
-        printResults(xPoints, yPoints, evaluationData)
-        plotResults(xPoints, yPoints, evaluationData)
-        
-    except Exception as e:
-        print(f"Error: {e}")
+    xPoints = np.linspace(-5, 5, 15)
+    yPoints = np.array([originalFunction(x) for x in xPoints])
+    
+    testPoints = np.array([-4.2, -2.7, -1.3, 0.8, 2.4, 3.9])
+    
+    evaluationData = evaluatePoints(xPoints, yPoints, testPoints)
+    
+    printResults(xPoints, yPoints, evaluationData)
+    plotResults(xPoints, yPoints, evaluationData)
 
 if __name__ == "__main__":
     main()

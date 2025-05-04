@@ -25,18 +25,15 @@ def evaluateBezier(t: float,
     x0, y0 = p0
     x1, y1 = p1
     
-    # Calculate α₀, β₀, α₁, β₁ from guide points
     α0 = guide0[0] - x0
     β0 = guide0[1] - y0
     α1 = x1 - guide1[0]
     β1 = y1 - guide1[1]
     
-    # Equation (3.25) from the book
     x = (2*(x0 - x1) + 3*(α0 + α1))*t**3 + \
         (3*(x1 - x0) - 3*(α1 + 2*α0))*t**2 + \
         3*α0*t + x0
     
-    # Equation (3.26) from the book
     y = (2*(y0 - y1) + 3*(β0 + β1))*t**3 + \
         (3*(y1 - y0) - 3*(β1 + 2*β0))*t**2 + \
         3*β0*t + y0
@@ -47,7 +44,7 @@ def plotBezierCurve(p0: Tuple[float, float],
                      p1: Tuple[float, float],
                      guide0: Tuple[float, float],
                      guide1: Tuple[float, float],
-                     num_points: int = 20) -> None:  # Reduced number of points for clearer table
+                     num_points: int = 20) -> None:
     """
     Plot a Bézier curve with its control points and guide lines.
     """
@@ -60,12 +57,10 @@ def plotBezierCurve(p0: Tuple[float, float],
     print(params_df.to_string(index=False))
     print("\n")
     
-    # Calculate curve points
     t_values = np.linspace(0, 1, num_points)
     curve_points = [evaluateBezier(t, p0, p1, guide0, guide1) for t in t_values]
     x_values, y_values = zip(*curve_points)
     
-    # Create table of curve points
     points_data = {
         't': t_values,
         'x(t)': x_values,
@@ -76,11 +71,9 @@ def plotBezierCurve(p0: Tuple[float, float],
     print(points_df.to_string(index=False, float_format=lambda x: '{:.4f}'.format(x)))
     print("\n")
     
-    # Plot the curve
     plt.figure(figsize=(10, 8))
     plt.plot(x_values, y_values, 'b-', label='Bézier Curve')
     
-    # Plot control points and guide lines
     plt.plot([p0[0], guide0[0]], [p0[1], guide0[1]], 'r--', alpha=0.5)
     plt.plot([p1[0], guide1[0]], [p1[1], guide1[1]], 'r--', alpha=0.5)
     plt.plot([p0[0]], [p0[1]], 'ro', label='Endpoints')
@@ -97,22 +90,16 @@ def plotBezierCurve(p0: Tuple[float, float],
 
 def main():
     print("Starting Bézier curve calculation...")
-    try:
-        # Example from the book (Figure 3.18)
-        p0 = (0, 1)      # First endpoint
-        p1 = (3, 1)      # Second endpoint
-        guide0 = (1, 3)  # Guide point for p0
-        guide1 = (2, -1) # Guide point for p1
-        
-        # Plot the curve
-        plotBezierCurve(p0, p1, guide0, guide1)
-        print("Displaying plot... (Close the plot window to end the program)")
-        plt.show()
-        print("Program completed successfully")
-        
-    except Exception as e:
-        print(f"Error occurred: {e}")
-        raise  # Re-raise the exception to see the full traceback
+    
+    p0 = (0, 1)
+    p1 = (3, 1)
+    guide0 = (1, 3)
+    guide1 = (2, -1)
+    
+    plotBezierCurve(p0, p1, guide0, guide1)
+    print("Displaying plot... (Close the plot window to end the program)")
+    plt.show()
+    print("Program completed successfully")
 
 if __name__ == "__main__":
     main()

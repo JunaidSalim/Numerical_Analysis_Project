@@ -53,7 +53,6 @@ def plotResults(iterationData: list, g: Callable[[float], float]) -> None:
     
     plt.figure(figsize=(12, 5))
     
-    # Plot error vs iterations
     plt.subplot(1, 2, 1)
     plt.plot(iterations, errors, 'b-o')
     plt.xlabel('Iterations')
@@ -61,7 +60,6 @@ def plotResults(iterationData: list, g: Callable[[float], float]) -> None:
     plt.title('Error vs Iterations')
     plt.grid(True)
     
-    # Plot iteration function and y=x line
     plt.subplot(1, 2, 2)
     x = np.linspace(-2, 2, 1000)
     y = [g(val) for val in x]
@@ -90,23 +88,16 @@ def printResults(iterationData: list, totalIterations: int) -> None:
     print(f"\nTotal Iterations: {totalIterations}")
 
 def main():
-    # Example: Find the fixed point of g(x) = (x + 1/x)/2
-    # This function converges to sqrt(1) = 1 and is a classic example
-    # from the Newton-Raphson method for finding square roots
     def g(x: float) -> float:
         return (x + 1/x)/2
     
-    try:
-        x0 = 2  # Initial guess
-        root, iterations, data = fixedPointIteration(g, x0)
-        print(f"\nTest Case: Finding fixed point of g(x) = (x + 1/x)/2")
-        print(f"Initial guess x0 = {x0}")
-        printResults(data, iterations)
-        plotResults(data, g)
-        print(f"\nFixed point found: {root:.8f}")
-        
-    except Exception as e:
-        print(f"Error: {e}")
+    x0 = 2
+    root, iterations, data = fixedPointIteration(g, x0)
+    print(f"\nTest Case: Finding fixed point of g(x) = (x + 1/x)/2")
+    print(f"Initial guess x0 = {x0}")
+    printResults(data, iterations)
+    plotResults(data, g)
+    print(f"\nFixed point found: {root:.8f}")
 
 if __name__ == "__main__":
     main()

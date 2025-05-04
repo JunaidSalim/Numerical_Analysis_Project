@@ -67,7 +67,6 @@ def plotResults(iterationData: list) -> None:
     iterations = [data['iteration'] for data in iterationData]
     errors = [data['error'] for data in iterationData]
     
-    # Plot error vs iterations
     plt.figure(figsize=(12, 5))
     
     plt.subplot(1, 2, 1)
@@ -77,7 +76,6 @@ def plotResults(iterationData: list) -> None:
     plt.title('Error vs Iterations')
     plt.grid(True)
     
-    # Plot function curve
     plt.subplot(1, 2, 2)
     x = np.linspace(0, 10, 1000)
     y = np.cos(x) - x
@@ -110,7 +108,6 @@ def printResults(iterationData: list, totalIterations: int, a: float, b: float, 
               f"{current_x:.6f} | {data['f(x)']:.6f} | "
               f"{error:.6f} |")
         
-        # Update interval bounds for next iteration
         if function(a) * data['f(x)'] < 0:
             b = current_x
         else:
@@ -124,7 +121,6 @@ def main():
     def f(x: float) -> float:
         return np.cos(x) - x
     
-    # Test case: interval [0, 10] contains root at x = 4
     testCases = [
         (0, 1),
     ]
@@ -139,4 +135,4 @@ def main():
             print(f"Error: {e}")
 
 if __name__ == "__main__":
-    main() 
+    main()

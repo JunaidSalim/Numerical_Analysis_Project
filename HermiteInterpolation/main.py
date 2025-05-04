@@ -32,7 +32,6 @@ def hermiteInterpolation(
     result = 0.0
     
     for i in range(n):
-        # Compute L_i(x)
         Li = 1.0
         dLi = 0.0
         
@@ -40,17 +39,13 @@ def hermiteInterpolation(
             if i != j:
                 Li *= (x - xPoints[j]) / (xPoints[i] - xPoints[j])
                 
-                # Compute derivative of L_i(x)
                 temp = 1.0 / (xPoints[i] - xPoints[j])
                 for k in range(n):
                     if k != i and k != j:
                         temp *= (x - xPoints[k]) / (xPoints[i] - xPoints[k])
                 dLi += temp
         
-        # Compute h_i(x)
         hi = (1 - 2 * (x - xPoints[i]) * dLi) * Li * Li
-        
-        # Compute H_i(x)
         Hi = (x - xPoints[i]) * Li * Li
         
         result += yPoints[i] * hi + dydxPoints[i] * Hi
@@ -101,7 +96,6 @@ def plotResults(
     """
     plt.figure(figsize=(12, 5))
     
-    # Plot interpolation polynomial
     plt.subplot(1, 2, 1)
     xSmooth = np.linspace(min(xPoints), max(xPoints), 1000)
     ySmooth = [hermiteInterpolation(xPoints, yPoints, dydxPoints, x) for x in xSmooth]
@@ -109,9 +103,8 @@ def plotResults(
     plt.plot(xSmooth, ySmooth, 'b-', label='Hermite Polynomial')
     plt.plot(xPoints, yPoints, 'ro', label='Data Points')
     
-    # Plot derivative vectors
     for x, y, dydx in zip(xPoints, yPoints, dydxPoints):
-        dx = 0.2  # Small x increment for derivative visualization
+        dx = 0.2
         dy = dydx * dx
         plt.arrow(x, y, dx, dy, head_width=0.05, head_length=0.1, fc='g', ec='g')
     
@@ -121,7 +114,6 @@ def plotResults(
     plt.grid(True)
     plt.legend()
     
-    # Plot comparison with original function
     plt.subplot(1, 2, 2)
     ySmoothTrue = [originalFunction(x) for x in xSmooth]
     
@@ -129,7 +121,6 @@ def plotResults(
     plt.plot(xSmooth, ySmooth, 'b--', label='Hermite Polynomial')
     plt.plot(xPoints, yPoints, 'ro', label='Data Points')
     
-    # Add test points
     testX = [data['x'] for data in evaluationData]
     testYInterp = [data['yInterp'] for data in evaluationData]
     testYTrue = [data['yTrue'] for data in evaluationData]
@@ -171,24 +162,16 @@ def printResults(
         print(f"| {data['x']:8.4f} | {data['yInterp']:10.4f} | {data['yTrue']:9.4f} | {data['error']:8.2e} |")
 
 def main():
-    try:
-        # Generate data points (15 points) over [-5, 5]
-        xPoints = np.linspace(-5, 5, 15)
-        yPoints = np.array([originalFunction(x) for x in xPoints])
-        dydxPoints = np.array([originalDerivative(x) for x in xPoints])
-        
-        # Define test points (avoiding data points)
-        testPoints = np.array([-4.2, -3.1, -1.8, -0.7, 0.8, 2.3, 3.5, 4.4])
-        
-        # Evaluate interpolation at test points
-        evaluationData = evaluatePoints(xPoints, yPoints, dydxPoints, testPoints)
-        
-        # Print and plot results
-        printResults(xPoints, yPoints, dydxPoints, evaluationData)
-        plotResults(xPoints, yPoints, dydxPoints, evaluationData)
-        
-    except Exception as e:
-        print(f"Error: {e}")
+    xPoints = np.linspace(-5, 5, 15)
+    yPoints = np.array([originalFunction(x) for x in xPoints])
+    dydxPoints = np.array([originalDerivative(x) for x in xPoints])
+    
+    testPoints = np.array([-4.2, -3.1, -1.8, -0.7, 0.8, 2.3, 3.5, 4.4])
+    
+    evaluationData = evaluatePoints(xPoints, yPoints, dydxPoints, testPoints)
+    
+    printResults(xPoints, yPoints, dydxPoints, evaluationData)
+    plotResults(xPoints, yPoints, dydxPoints, evaluationData)
 
 if __name__ == "__main__":
     main()

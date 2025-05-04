@@ -88,7 +88,6 @@ def plotErrorConvergence(f: Callable[[float], float],
     plt.loglog(nValues, simpErrors, 'ro-', label="Simpson's Rule")
     plt.grid(True)
     
-    # Customize x-axis ticks to show actual numbers
     plt.xticks(nValues, [str(n) for n in nValues])
     
     plt.xlabel('Number of Subintervals (n)')
@@ -104,16 +103,14 @@ def visualizeIntegration(f: Callable[[float], float],
     """
     Visualize the function and the approximation using both methods.
     """
-    x = np.linspace(a, b, 200)  # Points for smooth curve
+    x = np.linspace(a, b, 200)
     y = f(x)
     
-    # Points for trapezoidal and Simpson's rule
     xn = np.linspace(a, b, n+1)
     yn = f(xn)
     
     plt.figure(figsize=(15, 5))
     
-    # Trapezoidal Rule Visualization
     plt.subplot(121)
     plt.plot(x, y, 'b-', label='Function')
     plt.fill_between(xn, 0, yn, alpha=0.3, color='lightblue', label='Area')
@@ -124,30 +121,23 @@ def visualizeIntegration(f: Callable[[float], float],
     plt.title('Trapezoidal Rule')
     plt.legend()
     
-    # Simpson's Rule Visualization
     plt.subplot(122)
     plt.plot(x, y, 'b-', label='Function')
     plt.fill_between(x, 0, y, alpha=0.3, color='lightblue', label='Area')
     plt.plot(xn, yn, 'ro', label='Sampling Points')
     
-    # Add Simpson's parabolic interpolation
     for i in range(0, n-1, 2):
-        # Generate points for the parabola
         x_local = np.linspace(xn[i], xn[i+2], 100)
         
-        # Compute parabolic interpolation
         x0, x1, x2 = xn[i], xn[i+1], xn[i+2]
         y0, y1, y2 = yn[i], yn[i+1], yn[i+2]
         
-        # Lagrange basis polynomials for quadratic interpolation
         def L0(x): return ((x-x1)*(x-x2))/((x0-x1)*(x0-x2))
         def L1(x): return ((x-x0)*(x-x2))/((x1-x0)*(x1-x2))
         def L2(x): return ((x-x0)*(x-x1))/((x2-x0)*(x2-x1))
         
-        # Compute interpolated y values
         y_local = y0*L0(x_local) + y1*L1(x_local) + y2*L2(x_local)
         
-        # Plot the parabolic segment
         plt.plot(x_local, y_local, 'r-', linewidth=1, label='Simpson Curves' if i == 0 else "")
     
     plt.grid(True)
@@ -160,18 +150,13 @@ def visualizeIntegration(f: Callable[[float], float],
 def main():
     print("Numerical Integration Methods Demonstration")
     
-    # Test function: f(x) = e^x - 5x
-    # Analytical integral: e^x - (5x²/2)
     f = lambda x: np.exp(x) - 5*x
     
-    # We can compute exact integral: [e^b - (5b²/2)] - [e^a - (5a²/2)]
-    a, b = 0, 1  # Integration limits [0, 1]
-    n = 10       # Number of subintervals
+    a, b = 0, 1
+    n = 10
     
-    # Compute exact integral
     exactIntegral = (np.exp(b) - 5*b**2/2) - (np.exp(a) - 5*a**2/2)
     
-    # Compare methods
     trapResult = trapezoidalRule(f, a, b, n)
     simpResult = simpsonsRule(f, a, b, n)
     
@@ -180,15 +165,12 @@ def main():
     print(f"Simpson's Rule:   {simpResult:.10f}")
     print(f"Exact Value:      {exactIntegral:.10f}")
     
-    # Analyze convergence
     print("\nConvergence Analysis:")
     results = analyzeConvergence(f, exactIntegral, a, b)
     print(results.to_string(index=False, float_format=lambda x: '{:.10e}'.format(x)))
     
-    # Visualize the methods
     visualizeIntegration(f, a, b, n)
     
-    # Plot error convergence
     plotErrorConvergence(f, exactIntegral, a, b)
     
     print("\nProgram completed successfully")

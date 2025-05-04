@@ -27,12 +27,10 @@ def rombergIntegration(f: Callable[[float], float], a: float, b: float, maxLevel
     """
     R = np.zeros((maxLevel, maxLevel))
     
-    # Fill first column with trapezoidal rule values
     for i in range(maxLevel):
         n = 2**i
         R[i, 0] = trapezoidalRule(f, a, b, n)
     
-    # Fill rest of the table using Richardson extrapolation
     for j in range(1, maxLevel):
         for i in range(maxLevel - j):
             power = 4**j
@@ -57,7 +55,6 @@ def plotConvergence(R: np.ndarray, exactValue: float) -> None:
     levels = range(len(R))
     errors = [abs(R[0, j] - exactValue) for j in levels]
     
-    # Calculate minimum error at each level
     min_errors = []
     for j in levels:
         level_errors = [abs(R[i, j] - exactValue) for i in range(len(R)-j)]
@@ -65,7 +62,6 @@ def plotConvergence(R: np.ndarray, exactValue: float) -> None:
         min_errors.append(min_error)
     
     plt.figure(figsize=(10, 6))
-    # Plot both standard errors and minimum errors
     plt.semilogy(levels, errors, 'go-', linewidth=2, markersize=8, label='Standard Error')
     plt.semilogy(levels, min_errors, 'bo-', linewidth=2, markersize=8, label='Minimum Error')
     plt.grid(True)
@@ -74,7 +70,6 @@ def plotConvergence(R: np.ndarray, exactValue: float) -> None:
     plt.title('Romberg Integration Convergence')
     plt.legend()
     
-    # Add error values as annotations
     for i, (error, min_error) in enumerate(zip(errors, min_errors)):
         plt.annotate(f'Std: {error:.2e}\nMin: {min_error:.2e}', 
                     (i, error),
@@ -92,7 +87,6 @@ def visualizeIntegration(f: Callable[[float], float], a: float, b: float, n: int
     x = np.linspace(a, b, 200)
     y = f(x)
     
-    # Points for visualization
     xn = np.linspace(a, b, n+1)
     yn = f(xn)
     
@@ -101,7 +95,6 @@ def visualizeIntegration(f: Callable[[float], float], a: float, b: float, n: int
     plt.fill_between(x, 0, y, alpha=0.3, color='lightblue', label='Area')
     plt.plot(xn, yn, 'ro', label='Sampling Points')
     
-    # Connect points with lines to show trapezoids
     for i in range(n):
         plt.plot([xn[i], xn[i+1]], [yn[i], yn[i+1]], 'r-', linewidth=1, 
                 label='Trapezoids' if i == 0 else "")
@@ -114,21 +107,15 @@ def visualizeIntegration(f: Callable[[float], float], a: float, b: float, n: int
 def main():
     print("Romberg Integration Method Demonstration")
     
-    # Test function: f(x) = e^x - 5x
-    # Analytical integral: e^x - 5x²/2
     f = lambda x: np.exp(x) - 5*x
     
-    # Integration limits [0, 1]
     a, b = 0, 1
     maxLevel = 5
     
-    # Compute exact integral: [e^b - 5b²/2] - [e^a - 5a²/2]
     exactIntegral = (np.exp(b) - 5*b**2/2) - (np.exp(a) - 5*a**2/2)
     
-    # Compute Romberg table
     R = rombergIntegration(f, a, b, maxLevel)
     
-    # Display results
     print("\nRomberg Integration Table:")
     rombergTable = displayRombergTable(R)
     print(rombergTable.to_string(float_format=lambda x: '{:.10f}'.format(x)))
@@ -137,7 +124,6 @@ def main():
     print(f"Best Approximation (R(0,{maxLevel-1})): {R[0, maxLevel-1]:.10f}")
     print(f"Absolute Error: {abs(R[0, maxLevel-1] - exactIntegral):.2e}")
     
-    # Display minimum errors at each level
     print("\nError Analysis by Level:")
     for j in range(maxLevel):
         level_errors = [abs(R[i, j] - exactIntegral) for i in range(maxLevel-j)]
@@ -147,10 +133,8 @@ def main():
         print(f"  Standard Error (R(0,{j})): {abs(R[0, j] - exactIntegral):.2e}")
         print(f"  Minimum Error (R({min_error_index},{j})): {min_error:.2e}")
     
-    # Visualize the base approximation
-    visualizeIntegration(f, a, b, 8)  # Using 8 subintervals for clear visualization
+    visualizeIntegration(f, a, b, 8)
     
-    # Plot convergence with minimum errors
     plotConvergence(R, exactIntegral)
     
     print("\nProgram completed successfully")

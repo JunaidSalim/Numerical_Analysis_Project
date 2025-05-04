@@ -78,7 +78,6 @@ def plotApproximations(f: Callable[[float], float],
     x = np.linspace(xRange[0], xRange[1], numPoints)
     trueDeriv = [df(xi) for xi in x]
     
-    # Calculate approximations for all methods
     forward = [forwardDifference(f, xi, h) for xi in x]
     backward = [backwardDifference(f, xi, h) for xi in x]
     central = [centralDifference(f, xi, h) for xi in x]
@@ -103,24 +102,19 @@ def plotApproximations(f: Callable[[float], float],
 def main():
     print("Numerical Differentiation Methods Demonstration")
     
-    # Example function: f(x) = ln(x^2 + 1) + 2*ln(x + 2)
-    # Its derivative: f'(x) = (2x)/(x^2 + 1) + 2/(x + 2)
     f = lambda x: np.log(x**2 + 1) + 2*np.log(x + 2)
     df = lambda x: (2*x)/(x**2 + 1) + 2/(x + 2)
     
-    x0 = 1.5  # Point of evaluation - changed to be more suitable for log function
-    h = 0.01  # Step size
+    x0 = 1.5
+    h = 0.01
     
-    # Compare methods
     print(f"\nComparing methods at x = {x0:.4f} with h = {h}")
     results = compareMethods(f, df, x0, h)
     print("\nResults:")
     print(results.to_string(index=False, float_format=lambda x: '{:.10f}'.format(x)))
     
-    # Plot comparisons
-    plotApproximations(f, df, (0.1, 4), h)  # Adjusted range to avoid x ≤ 0 for log function
+    plotApproximations(f, df, (0.1, 4), h)
     
-    # Study effect of step size
     hValues = [0.1, 0.01, 0.001, 0.0001, 0.00001]
     errorData = []
     
@@ -139,7 +133,6 @@ def main():
     errorDf = pd.DataFrame(errorData)
     print(errorDf.to_string(index=False, float_format=lambda x: '{:.10f}'.format(x)))
     
-    # Plot error vs step size
     plt.figure(figsize=(10, 6))
     plt.loglog(hValues, [d['Absolute Error'] for d in errorData], 'bo-')
     plt.grid(True)
