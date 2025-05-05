@@ -73,5 +73,4 @@ See the [LICENSE](LICENSE) file for details.
 ## Project Report
 Detailed analysis and results are available in the project report:
 - [Report.pdf](Report.pdf)
-- [Report.docx](Report.docx)
 
